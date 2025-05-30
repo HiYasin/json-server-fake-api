@@ -47,8 +47,6 @@ Create a `db.json` or `db.json5` file
 }
 ```
 
-You can read more about JSON5 format [here](https://github.com/json5/json5).
-
 </details>
 
 Pass it to JSON Server CLI
@@ -180,3 +178,105 @@ json-server -s ./static -s ./node_modules
 - `id` is always a string and will be generated for you if missing
 - use `_per_page` with `_page` instead of `_limit`for pagination
 - use Chrome's `Network tab > throtling` to delay requests instead of `--delay` CLI option
+
+
+## Setup Custom Routes & Middlewares
+
+### Add Custom Routes
+
+Create a `routes.json` file to **remap routes**:
+
+```json
+// routes.json
+{
+  "/api/posts": "/posts",
+  "/api/comments": "/comments"
+}
+```
+
+Then run:
+
+```bash
+json-server --watch db.json --routes routes.json
+```
+
+Now, `/api/posts` maps to `/posts`.
+
+
+### Add Custom Middleware
+
+Create a `server.js` file:
+
+```js
+// server.js
+const jsonServer = require('json-server');
+const server = jsonServer.create();
+const router = jsonServer.router('db.json');
+const middlewares = jsonServer.defaults();
+
+// Custom middleware
+server.use((req, res, next) => {
+  console.log(`[${req.method}] ${req.url}`);
+  // Example: Add a timestamp
+  req.body.createdAt = Date.now();
+  next();
+});
+
+// Use default middlewares (logger, static, cors, etc)
+server.use(middlewares);
+
+// Custom routes
+server.use(jsonServer.rewriter({
+  '/api/*': '/$1'
+}));
+
+// Use the default router
+server.use(router);
+
+// Start the server
+server.listen(3000, () => {
+  console.log('JSON Server is running on http://localhost:3000');
+});
+```
+
+---
+
+### Run the Custom Server
+
+```bash
+node server.js
+```
+
+---
+
+### Use with `npm` Script
+
+In your `package.json`:
+
+```json
+"scripts": {
+  "start-server": "node server.js"
+}
+```
+
+Run it using:
+
+```bash
+npm run start-server
+```
+
+---
+
+## ✅ Output Example
+
+With the above setup, hitting:
+
+```http
+GET http://localhost:3000/api/posts
+```
+
+will return the `posts` array, and your custom middleware will log requests and modify `req.body`.
+
+---
+
+More advanced middlewares like **auth**, **rate limiting**, or **JWT**, let me know!
