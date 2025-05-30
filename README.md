@@ -52,7 +52,7 @@ Create a `db.json` or `db.json5` file
 Pass it to JSON Server CLI
 
 ```shell
-$ npx json-server db.json
+$ npx json-server ./database/db.json
 ```
 
 Or,
@@ -197,7 +197,7 @@ Create a `routes.json` file to **remap routes**:
 Then run:
 
 ```bash
-json-server --watch db.json --routes routes.json
+json-server --watch ./database/db.json --routes ./routes/routes.json
 ```
 
 Now, `/api/posts` maps to `/posts`.
