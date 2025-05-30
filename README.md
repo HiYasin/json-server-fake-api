@@ -1,5 +1,5 @@
 # json-server
-## Orginal Repo link: [here](https://github.com/typicode/json-server)
+### Orginal Repo link: [Click here](https://github.com/typicode/json-server)
 
 ## Install
 
@@ -279,4 +279,4 @@ will return the `posts` array, and your custom middleware will log requests and 
 
 ---
 
-More advanced middlewares like **auth**, **rate limiting**, or **JWT**, let me know!
+### Setup Advance Server with [Click Here](https://github.com/HiYasin/json-server-fake-api/blob/main/ADVANCED_SERVER.md)
